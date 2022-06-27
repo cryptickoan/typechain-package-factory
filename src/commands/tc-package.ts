@@ -1,12 +1,18 @@
+import { existsSync, mkdirSync, rmSync } from "fs"
+import { Command, extractAbis } from "./extract"
 import chalk from "chalk"
 import { execSync } from "child_process"
-import { existsSync, mkdirSync, rmSync } from "fs"
 import path from "path"
 import { setupConfig } from "../utils"
-import { Command, extractAbis } from "./extract"
 import { generateTypechainContracts } from "./generate-typechain"
 import { createNpmWorkspace } from "./init-workspaces"
 
+const createDirectory = (packageName: string) => {
+    if (!existsSync(path.resolve('packages', packageName, 'src'))){
+        mkdirSync(path.resolve('packages', packageName, 'src'))
+    }
+}
+ 
 const tcPackage = (argv: any) => {
     const packageName = argv['package']
     const packagePath = path.resolve('packages', packageName)
@@ -18,16 +24,13 @@ const tcPackage = (argv: any) => {
     console.log(chalk.yellow('\n2. Extracting abis from artifacts.'))
     extractAbis(argv)
 
-    // Create src folder inside package.
-    if (!existsSync(path.resolve('packages', packageName, 'src'))){
-        mkdirSync(path.resolve('packages', packageName, 'src'))
-    }
+    createDirectory(packageName)
 
     console.log(chalk.yellow('\n3. Generating typechained contracts.'))
     const pair = [path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')]
     generateTypechainContracts(pair)
 
-    console.log(chalk.yellow('\n4. Configuring typescript.'))
+    console.log(chalk.yellow('\n4. Configuring typescript and installing dependencies.'))
     setupConfig(packageName)
     console.log(chalk.green('\rConfiguration successful, you can now build the typechain package by running npm build:' + packageName))
 
