@@ -57,17 +57,7 @@ const extractAndSave = (
     }
 }
 
-/**
- * This function will extract all abis from the given artifact directory.
- * @param commands - List of commandline commands and options, from yargs.
- */
-const extractAbis = (commands: any) => {
-    // 1. Get argument from command line.
-    const filter = commands['filter']
-    const directory = commands['source']
-    const output = commands['out']
-
-    // 2. From the given directory, extract all forge generated artifacts.
+export const extractArtifactsInDirectory = (directory: string, filter: string[]) => {
     let filesInDirectory
     try {
         // 1. Get all files in directory
@@ -87,9 +77,25 @@ const extractAbis = (commands: any) => {
         throw new Error(chalk.red("No artifacts found in " + directory + " Maybe you didn't build the contracts yet?"))
     }
 
+    return filesInDirectory
+}
+
+/**
+ * This function will extract all abis from the given artifact directory.
+ * @param commands - List of commandline commands and options, from yargs.
+ */
+export const extractAbis = (commands: any) => {
+    // 1. Get argument from command line.
+    const filter = commands['filter']
+    const directory = commands['source']
+    const output = commands['out']
+
+    // 2. From the given directory, extract all forge generated artifacts.
+    const filesInDirectory = extractArtifactsInDirectory(directory, filter)
+
     // 3. From the forge generated artifacts, get all json files.
     const artifactPaths = getArtifactPaths(directory, filesInDirectory)
-    
+
     // 4. Extract abi from the json objects and then save it inside the given output directory path.
     extractAndSave(
         artifactPaths.abiPaths, 
@@ -97,7 +103,7 @@ const extractAbis = (commands: any) => {
         artifactPaths.abiFilenames
     )
 
-    console.log(chalk.green("ABI extraction successful!"))
+    console.log(chalk.green("\rABI extraction successful!"))
 }
 
 const extractCheck = (argv: any) => {
