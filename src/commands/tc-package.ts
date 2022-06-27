@@ -1,6 +1,6 @@
 import chalk from "chalk"
 import { execSync } from "child_process"
-import { existsSync, mkdirSync, rm, rmSync } from "fs"
+import { existsSync, mkdirSync, rmSync } from "fs"
 import path from "path"
 import { setupConfig } from "../utils"
 import { Command, extractAbis } from "./extract"
