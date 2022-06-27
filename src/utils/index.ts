@@ -1,5 +1,7 @@
 import * as fs from 'fs'
 import path from 'path';
+export { setupConfig } from './tsconfig/build';
+
 
 export const readAndFilterDirectory = (
     path: string,

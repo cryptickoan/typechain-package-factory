@@ -6,6 +6,7 @@ import chalk from "chalk";
 import { extractCommand } from './commands/extract';
 import { initWorkspacesCommand } from './commands/init-workspaces';
 import { generateTypechainCommand } from './commands/generate-typechain';
+import { tcPackageCommand } from './commands/tc-package';
 
 yargonaut.style('green').helpStyle('green').errorsStyle('red')
 const usage =  chalk.green("\nUsage: tc-package <SUBCOMMAND> sentence to be translated");
@@ -18,5 +19,7 @@ yargs
       .check((argv) => initWorkspacesCommand.check(argv))
       .command(generateTypechainCommand.name, generateTypechainCommand.description, generateTypechainCommand.options, generateTypechainCommand.function)
       .check((argv) => generateTypechainCommand.check(argv))
+      .command(tcPackageCommand.name, tcPackageCommand.description, tcPackageCommand.options, tcPackageCommand.function)
+      .check((argv) => tcPackageCommand.check(argv))
       .help(true)  
       .argv;
