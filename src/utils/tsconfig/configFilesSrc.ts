@@ -40,3 +40,6 @@ export const esm = {
   }
 }
 
+export const npmignoreContents = "src\ntsconfig*.json"
+
+export const gitignoreContents = "\n\n#####################\n# Typechain Package #\n#####################\n\npackages/**/dist"
