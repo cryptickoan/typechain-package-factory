@@ -1,6 +1,6 @@
 import chalk from "chalk"
-import { exec, execSync } from "child_process"
-import { existsSync, mkdirSync } from "fs"
+import { execSync } from "child_process"
+import { existsSync, mkdirSync, rm, rmSync } from "fs"
 import path from "path"
 import { setupConfig } from "../utils"
 import { Command, extractAbis } from "./extract"
@@ -34,6 +34,8 @@ const tcPackage = (argv: any) => {
     console.log(chalk.yellow("\n5. Building package"))
     execSync('npm run build:' + packageName)
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
+
+    rmSync(argv['out'],{force: true, recursive: true})
 }
 
 const tcPackageCheck = () => {
