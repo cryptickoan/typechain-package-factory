@@ -1,29 +1,55 @@
+import { base, esm, cjs, npmignoreContents, gitignoreContents } from './configFilesSrc'
+import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
-import { writeFileSync } from 'fs'
-import path from 'path'
 import { loadJson } from '..'
-import { base, esm, cjs } from './tsconfig'
+import path from 'path'
 
-export function setupConfig(packageName: string) {
-    // Typescript files
-    writeFileSync('./packages/test/tsconfig-base.json', JSON.stringify(base, null, 2), {encoding: 'utf-8' })
-    writeFileSync('./packages/test/tsconfig-esm.json', JSON.stringify(esm, null, 2), {encoding: 'utf-8' })
-    writeFileSync('./packages/test/tsconfig-cjs.json', JSON.stringify(cjs, null, 2), {encoding: 'utf-8' })
+export async function setupConfig(packageName: string) {
+    await generateTypescriptFiles(packageName)
+    await installDependencies(packageName)
+    await addBuildScripts(packageName)
+    await generateIgnoreFiles(packageName)
+}
 
+const generateTypescriptFiles = async (packageName: string) => {
+    writeFileSync('./packages/' + packageName + '/tsconfig-base.json', JSON.stringify(base, null, 2), {encoding: 'utf-8' })
+    writeFileSync('./packages/' + packageName +  '/tsconfig-esm.json', JSON.stringify(esm, null, 2), {encoding: 'utf-8' })
+    writeFileSync('./packages/' + packageName + '/tsconfig-cjs.json', JSON.stringify(cjs, null, 2), {encoding: 'utf-8' })
+}
+
+const addBuildScripts = async (packageName: string) => {
+    // Add build scripts to workspace
     const projectPackageJson = loadJson(path.resolve('package.json'))
     const projectBuildCommand = "npm run build --workspace=packages/" + packageName
     projectPackageJson.scripts['build:' + packageName] = projectBuildCommand
     writeFileSync(path.resolve('package.json'), JSON.stringify(projectPackageJson, null, 2))
     
+    // Add build scripts to project
     const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
     const packageCommand = "npx tsc -p tsconfig-esm.json && npx tsc -p tsconfig-cjs.json"
     workspacePackageJson.scripts["build"] = packageCommand
-
-    if (!workspacePackageJson.dependencies) { workspacePackageJson.dependencies = {} }
-
     writeFileSync(path.resolve("packages", packageName,'package.json'), JSON.stringify(workspacePackageJson, null, 2))
+
+    return workspacePackageJson
+}
+
+const generateIgnoreFiles = async (packageName: string) => {
+     // Generate npm ignore file
+     writeFileSync(path.resolve('packages/', packageName, '.npmignore'), npmignoreContents)
+
+     // Edit the project's .gitignore.
+     let gitignoreData = readFileSync(path.resolve('.gitignore'), {encoding: "utf-8"})
+     gitignoreData = gitignoreData.includes(gitignoreContents) ? gitignoreData : gitignoreData + gitignoreContents
+     writeFileSync(path.resolve('.gitignore'), gitignoreData)
+}
+
+const installDependencies = async (packageName: string) => {
+    const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
+    
+    // Install dependencies if not previously installed.
+    if (!workspacePackageJson.dependencies) { workspacePackageJson.dependencies = {} }
     if (Object.keys(workspacePackageJson.dependencies).length === 0) {
-        console.log("Installing ethers and typescript in package workspace")
+        console.log("Installing ethers and typescript in packages/" + packageName)
         const an = execSync("npm i ethers typescript -w packages/" + packageName, {encoding: "utf-8"})
         console.log(an)
     }
