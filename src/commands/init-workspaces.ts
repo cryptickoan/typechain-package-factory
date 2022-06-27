@@ -2,15 +2,14 @@ import chalk from "chalk";
 import * as childProcess from "child_process"
 import { Command } from "./extract";
 
-const createNpmWorkspace = (workspace: string) => {
+export const createNpmWorkspace = (workspace: string) => {
     const output = childProcess.execSync('npm init -w ' + workspace + " -y", { encoding: 'utf-8' })
-    console.log(chalk.green(output.slice(0, output.indexOf(":"))))
+    console.log(chalk.green("\r" + output.slice(0, output.indexOf(":"))))
 }
 
 const initWorkspaces = (argv: any) => {
     // 1. Extract all command line argument inputs
     const workspaces = argv['paths']
-    console.log({workspaces})
     
     // 2. For every given workspace path, create an npm workspace.
     for (const workspace of workspaces) {
