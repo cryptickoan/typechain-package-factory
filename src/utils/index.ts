@@ -30,7 +30,7 @@ export function loadJson(path: string): any {
 }
 
 export function atomicWrite(targetPath: string, value: string | Uint8Array): void {
-    const tmp = path.resolve(__dirname, ".atomic-tmp");
+    const tmp = path.resolve(".atomic-tmp");
     fs.writeFileSync(tmp, value);
     fs.renameSync(tmp, targetPath);
 }
