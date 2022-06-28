@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import * as fs from 'fs'
 import path from 'path';
 export { setupConfig } from './tsconfig/build';
@@ -42,4 +43,17 @@ export const createDirectory = (packageName: string, directoryName: string) => {
     if (!fs.existsSync(path.resolve('packages', packageName, directoryName))){
         fs.mkdirSync(path.resolve('packages', packageName, directoryName))
     }
+}
+
+
+export const askUser = (text: string, shouldAbort: boolean) => {
+    const prompt = require('prompt-sync')()
+    console.log("\n")
+    const h = prompt(chalk.yellow(text))
+    
+    if (h.includes('n') || h.includes('N')) {
+        if (shouldAbort) {console.log(chalk.grey("Aborted"))}
+        return false
+    }
+    return true
 }

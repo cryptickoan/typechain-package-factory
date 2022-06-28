@@ -4,6 +4,9 @@ import path from "path";
 import { getPackageInfo, getUserApproval, publishPackage } from "../utils/publish";
 import { Command } from "./types";
 
+/**
+ * Publsh a single package, also handles package.json edit.
+ */
 const publish = async (argv: any) => {
     const packageName = argv['package']
     const workspacePackageJson = getPackageInfo(packageName)

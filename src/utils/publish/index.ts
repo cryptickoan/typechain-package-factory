@@ -1,7 +1,7 @@
 import chalk from "chalk"
 import { exec, execSync } from "child_process"
 import path from "path"
-import { loadJson } from ".."
+import { askUser, loadJson } from ".."
 
 const prompt = require('prompt-sync')()
 
@@ -13,14 +13,8 @@ export const getUserApproval = (workspacePackageJson: any) => {
     console.log(chalk.cyan("\nThis would be your package's package.json: \n"))
     console.log(workspacePackageJson)
 
-    const response: string = prompt(chalk.yellow('Is this okay? (yes) '))
 
-    if (response.includes('n') || response.includes('N')) {
-        console.log(chalk.grey("Aborted"))
-        return false
-    }
-
-    return true
+    return askUser('Is this okay? (yes) ', true)
 }
 
 /**
@@ -80,12 +74,4 @@ export const publishPackage = (packageName: string, workspacePackageJson: any) =
             console.log(chalk.green('Yay! Now you can install your package by running: npm install ' + workspacePackageJson.name + '\x07'))
         }
     })
-}
-
-export const askUser = () => {
-    console.log("\n")
-    const h = prompt(chalk.yellow('Do you want to publish this pacakge? (yes) '))
-
-    if (h.includes('n') || h.includes('N')) return false
-    return true
 }

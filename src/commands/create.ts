@@ -1,13 +1,13 @@
 import { generateTypechainContracts } from "./generate-typechain"
 import { createNpmWorkspace } from "./init-workspaces"
 import { extractAbis } from "./extract"
-import { loadJson, setupConfig } from "../utils"
+import { askUser, loadJson, setupConfig } from "../utils"
 import { execSync } from "child_process"
 import { Command } from "./types"
 import { rmSync } from "fs"
 import chalk from "chalk"
 import path from "path"
-import { askUser, getUserApproval, publishPackage } from "../utils/publish"
+import { getUserApproval, publishPackage } from "../utils/publish"
  
 /**
  * Create and modularize typechain contracts. 
@@ -36,7 +36,7 @@ const create = async (argv: any) => {
     rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
-    if(askUser()) {
+    if(askUser('Do you want to publish this pacakge? (yes) ', false)) {
         const packageJson = loadJson(path.resolve("packages", packageName,'package.json')) 
         if(!getUserApproval(packageJson)) return
         publishPackage(packageName, packageJson) 
