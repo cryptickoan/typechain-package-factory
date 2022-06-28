@@ -1,8 +1,11 @@
 import chalk from "chalk"
 import { execSync } from "child_process"
-import { Command } from "./extract"
+import { createDirectory } from "../utils"
+import { Command } from "./types"
 
 export const generateTypechainContracts = (pair: string[]) => {
+    createDirectory(pair[0], pair[1])
+    
     // 1. Call typechain to generate typed contracts
     const output = execSync('npx typechain --target ethers-v5 --out-dir ' +  pair[1] + " " + pair[0],{ encoding: 'utf-8' })
     console.log(chalk.green("\r" + output.slice(0, output.indexOf('!'))))

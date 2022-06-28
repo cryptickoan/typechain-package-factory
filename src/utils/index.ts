@@ -38,3 +38,9 @@ export function atomicWrite(targetPath: string, value: string | Uint8Array): voi
 export function saveJson(filename: string, data: any, sort?: boolean): any {
     atomicWrite(filename, JSON.stringify(data) + "\n");
 }
+
+export const createDirectory = (packageName: string, directoryName: string) => {
+    if (!fs.existsSync(path.resolve('packages', packageName, directoryName))){
+        fs.mkdirSync(path.resolve('packages', packageName, directoryName))
+    }
+}

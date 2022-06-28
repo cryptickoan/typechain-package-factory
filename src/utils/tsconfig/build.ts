@@ -3,12 +3,14 @@ import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import { loadJson } from '..'
 import path from 'path'
+import chalk from 'chalk'
 
 export async function setupConfig(packageName: string) {
     await generateTypescriptFiles(packageName)
     await installDependencies(packageName)
     await addBuildScripts(packageName)
     await generateIgnoreFiles(packageName)
+    console.log(chalk.green('\rConfiguration successful, you can now build the typechain package by running npm build:' + packageName))
 }
 
 const generateTypescriptFiles = async (packageName: string) => {
@@ -30,7 +32,7 @@ const addBuildScripts = async (packageName: string) => {
 
     workspacePackageJson.scripts["build"] = packageCommand
     workspacePackageJson['exports'] = esmCjsCompatibility
-    
+
     writeFileSync(path.resolve("packages", packageName,'package.json'), JSON.stringify(workspacePackageJson, null, 2))
 
 }

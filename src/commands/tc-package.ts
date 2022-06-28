@@ -1,22 +1,17 @@
-import { existsSync, mkdirSync, rmSync } from "fs"
-import { Command, extractAbis } from "./extract"
-import chalk from "chalk"
-import { execSync } from "child_process"
-import path from "path"
-import { setupConfig } from "../utils"
 import { generateTypechainContracts } from "./generate-typechain"
+import { extractAbis } from "./extract"
 import { createNpmWorkspace } from "./init-workspaces"
-
-const createDirectory = (packageName: string) => {
-    if (!existsSync(path.resolve('packages', packageName, 'src'))){
-        mkdirSync(path.resolve('packages', packageName, 'src'))
-    }
-}
+import { setupConfig } from "../utils"
+import { execSync } from "child_process"
+import { rmSync } from "fs"
+import chalk from "chalk"
+import path from "path"
+import { Command } from "./types"
  
 const tcPackage = (argv: any) => {
     const packageName = argv['package']
     const packagePath = path.resolve('packages', packageName)
-    argv['out'] = path.resolve('temp')
+    argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
 
     console.log(chalk.yellow('1. Creating NPM workspace for package.'))
     createNpmWorkspace(packagePath)
@@ -24,24 +19,26 @@ const tcPackage = (argv: any) => {
     console.log(chalk.yellow('\n2. Extracting abis from artifacts.'))
     extractAbis(argv)
 
-    createDirectory(packageName)
-
     console.log(chalk.yellow('\n3. Generating typechained contracts.'))
-    const pair = [path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')]
-    generateTypechainContracts(pair)
+    generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')])
 
     console.log(chalk.yellow('\n4. Configuring typescript and installing dependencies.'))
     setupConfig(packageName)
-    console.log(chalk.green('\rConfiguration successful, you can now build the typechain package by running npm build:' + packageName))
 
     console.log(chalk.yellow("\n5. Building package"))
     execSync('npm run build:' + packageName)
-    console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
-    rmSync(argv['out'],{force: true, recursive: true})
+    
+    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
+    console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 }
 
 const tcPackageCheck = () => {
+    // @ts-ignore
+    if (argv['filter'] && argv['filter'].length === 0) {
+        throw new Error(chalk.red("Filter is empty, please provide at least one filter or remove -f/--filter from your options when running the command"))
+    }
+
     return true
 }
 

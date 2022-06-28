@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import * as childProcess from "child_process"
-import { Command } from "./extract";
+import { Command } from "./types";
 
 export const createNpmWorkspace = (workspace: string) => {
     const output = childProcess.execSync('npm init -w ' + workspace + " -y", { encoding: 'utf-8' })
