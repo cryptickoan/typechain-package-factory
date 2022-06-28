@@ -1,4 +1,4 @@
-import { base, esm, cjs, npmignoreContents, gitignoreContents } from './configFilesSrc'
+import { base, esm, cjs, npmignoreContents, gitignoreContents, esmCjsCompatibility } from './configFilesSrc'
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import { loadJson } from '..'
@@ -27,25 +27,17 @@ const addBuildScripts = async (packageName: string) => {
     // Add build scripts to project
     const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
     const packageCommand = "npx tsc -p tsconfig-esm.json && npx tsc -p tsconfig-cjs.json"
+
     workspacePackageJson.scripts["build"] = packageCommand
+    workspacePackageJson['exports'] = esmCjsCompatibility
+    
     writeFileSync(path.resolve("packages", packageName,'package.json'), JSON.stringify(workspacePackageJson, null, 2))
 
-    return workspacePackageJson
-}
-
-const generateIgnoreFiles = async (packageName: string) => {
-     // Generate npm ignore file
-     writeFileSync(path.resolve('packages/', packageName, '.npmignore'), npmignoreContents)
-
-     // Edit the project's .gitignore.
-     let gitignoreData = readFileSync(path.resolve('.gitignore'), {encoding: "utf-8"})
-     gitignoreData = gitignoreData.includes(gitignoreContents) ? gitignoreData : gitignoreData + gitignoreContents
-     writeFileSync(path.resolve('.gitignore'), gitignoreData)
 }
 
 const installDependencies = async (packageName: string) => {
     const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
-    
+
     // Install dependencies if not previously installed.
     if (!workspacePackageJson.dependencies) { workspacePackageJson.dependencies = {} }
     if (Object.keys(workspacePackageJson.dependencies).length === 0) {
@@ -53,4 +45,14 @@ const installDependencies = async (packageName: string) => {
         const an = execSync("npm i ethers typescript -w packages/" + packageName, {encoding: "utf-8"})
         console.log(an)
     }
+}
+
+const generateIgnoreFiles = async (packageName: string) => {
+    // Generate npm ignore file
+    writeFileSync(path.resolve('packages/', packageName, '.npmignore'), npmignoreContents)
+
+    // Edit the project's .gitignore.
+    let gitignoreData = readFileSync(path.resolve('.gitignore'), {encoding: "utf-8"})
+    gitignoreData = gitignoreData.includes(gitignoreContents) ? gitignoreData : gitignoreData + gitignoreContents
+    writeFileSync(path.resolve('.gitignore'), gitignoreData)
 }

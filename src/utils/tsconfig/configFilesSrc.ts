@@ -43,3 +43,8 @@ export const esm = {
 export const npmignoreContents = "src\ntsconfig*.json"
 
 export const gitignoreContents = "\n\n#####################\n# Typechain Package #\n#####################\n\npackages/**/dist"
+
+export const esmCjsCompatibility = {
+  "import": "./dist/esm/index.js",
+  "require": "./dist/cjs/index.js"
+}
