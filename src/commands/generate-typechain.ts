@@ -3,6 +3,10 @@ import { execSync } from "child_process"
 import { createDirectory } from "../utils"
 import { Command } from "./types"
 
+/**
+ * Generate typechain contracts from the given source and save to the given output path.
+ * @param pair - Array. [sourcePath, outputPath]
+ */
 export const generateTypechainContracts = (pair: string[]) => {
     createDirectory(pair[0], pair[1])
     
@@ -11,6 +15,10 @@ export const generateTypechainContracts = (pair: string[]) => {
     console.log(chalk.green("\r" + output.slice(0, output.indexOf('!'))))
 }
 
+/**
+ * Generate typechain contracts from the given sources and save to their respective output paths. 
+ * @param argv - Array. [sourcePath, outputPath][]
+ */
 export const generateTypechain = (argv: any) => {
     // Get all pairs
     const givenArguments = argv['pairs']
@@ -35,7 +43,7 @@ const generateTypechainCheck = (argv: any) => {
 
 export const generateTypechainCommand: Command = {
     name: "generate-typechain",
-    description: "Generate typechain for the given contract and save output to the fiven path",
+    description: "Generate typechain for the given contract and save output to the given path",
     options: {
         pairs: {
               "alias": "-p",

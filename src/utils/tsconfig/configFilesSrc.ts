@@ -1,4 +1,4 @@
-export const base = {
+export const tsBase = {
   "compilerOptions": {
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
@@ -22,7 +22,7 @@ export const base = {
   "include": ["src"]
 }
 
-export const cjs = {
+export const tsCjs = {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
     "module": "commonjs",
@@ -31,7 +31,7 @@ export const cjs = {
   }
 }
 
-export const esm = {
+export const tsEsm = {
   "extends": "./tsconfig-base.json",
   "compilerOptions": {
     "module": "esnext",

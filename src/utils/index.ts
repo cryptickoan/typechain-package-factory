@@ -2,7 +2,6 @@ import * as fs from 'fs'
 import path from 'path';
 export { setupConfig } from './tsconfig/build';
 
-
 export const readAndFilterDirectory = (
     path: string,
     filter?: string[]
@@ -12,7 +11,7 @@ export const readAndFilterDirectory = (
     try {
         filesInDirectory = fs.readdirSync(path)
     } catch (e) {
-        throw Error('fuck me :)')
+        throw Error('Error reading directory! ' + path)
     }
     
     // 2. If theres a filter, filter the filesInDirectory array.

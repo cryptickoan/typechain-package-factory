@@ -44,7 +44,7 @@ const extractCheck = (argv: any) => {
 
 export const extractCommand: Command = {
     name: "extract",
-    description: 'Extract abis from artifacts',
+    description: 'Extract abis from artifacts.',
     options: {
         source: {
               "alias": "s",

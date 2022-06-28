@@ -58,6 +58,11 @@ export const extractAndSave = (
     }
 }
 
+/**
+ * Extract all forge artifacts in the given directory
+ * @param directory - Path to look for
+ * @param filter - Array. All files containing this word will be ignored.
+ */
 export const extractArtifactsInDirectory = (directory: string, filter: string[]) => {
     let filesInDirectory
     try {

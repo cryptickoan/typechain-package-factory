@@ -1,4 +1,4 @@
-import { base, esm, cjs, npmignoreContents, gitignoreContents, esmCjsCompatibility } from './configFilesSrc'
+import { tsBase, tsEsm, tsCjs, npmignoreContents, gitignoreContents, esmCjsCompatibility } from './configFilesSrc'
 import { readFileSync, writeFileSync } from 'fs'
 import { execSync } from 'child_process'
 import { loadJson } from '..'
@@ -6,19 +6,25 @@ import path from 'path'
 import chalk from 'chalk'
 
 export async function setupConfig(packageName: string) {
-    await generateTypescriptFiles(packageName)
+    await createTypescriptFiles(packageName)
     await installDependencies(packageName)
     await addBuildScripts(packageName)
     await generateIgnoreFiles(packageName)
     console.log(chalk.green('\rConfiguration successful, you can now build the typechain package by running npm build:' + packageName))
 }
 
-const generateTypescriptFiles = async (packageName: string) => {
-    writeFileSync('./packages/' + packageName + '/tsconfig-base.json', JSON.stringify(base, null, 2), {encoding: 'utf-8' })
-    writeFileSync('./packages/' + packageName +  '/tsconfig-esm.json', JSON.stringify(esm, null, 2), {encoding: 'utf-8' })
-    writeFileSync('./packages/' + packageName + '/tsconfig-cjs.json', JSON.stringify(cjs, null, 2), {encoding: 'utf-8' })
+/**
+ * Create typescript configuration files.
+ */
+const createTypescriptFiles = async (packageName: string) => {
+    writeFileSync('./packages/' + packageName + '/tsconfig-base.json', JSON.stringify(tsBase, null, 2), {encoding: 'utf-8' })
+    writeFileSync('./packages/' + packageName +  '/tsconfig-esm.json', JSON.stringify(tsEsm, null, 2), {encoding: 'utf-8' })
+    writeFileSync('./packages/' + packageName + '/tsconfig-cjs.json', JSON.stringify(tsCjs, null, 2), {encoding: 'utf-8' })
 }
 
+/**
+ * Add build scripts to package and project.
+ */
 const addBuildScripts = async (packageName: string) => {
     // Add build scripts to workspace
     const projectPackageJson = loadJson(path.resolve('package.json'))
@@ -37,6 +43,9 @@ const addBuildScripts = async (packageName: string) => {
 
 }
 
+/**
+ * Will install dependencies to package if not previously installed.
+ */
 const installDependencies = async (packageName: string) => {
     const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
 
@@ -49,6 +58,9 @@ const installDependencies = async (packageName: string) => {
     }
 }
 
+/**
+ * Generate npm ignore files for package. Also edit the projects .gitignore file to ignore typescript build output
+ */
 const generateIgnoreFiles = async (packageName: string) => {
     // Generate npm ignore file
     writeFileSync(path.resolve('packages/', packageName, '.npmignore'), npmignoreContents)
