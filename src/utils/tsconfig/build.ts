@@ -9,6 +9,7 @@ export async function setupConfig(packageName: string) {
     await createTypescriptFiles(packageName)
     await installDependencies(packageName)
     await addBuildScripts(packageName)
+    await addPublishScripts(packageName)
     await generateIgnoreFiles(packageName)
     console.log(chalk.green('\rConfiguration successful, you can now build the typechain package by running npm build:' + packageName))
 }
@@ -44,6 +45,24 @@ const addBuildScripts = async (packageName: string) => {
 }
 
 /**
+ * Add build scripts to package and project.
+ */
+ const addPublishScripts = async (packageName: string) => {
+    const projectPackageJson = loadJson(path.resolve('package.json'))
+    const projectBuildCommand = "npm run package:publish --workspace=packages/" + packageName
+    projectPackageJson.scripts['publish:' + packageName] = projectBuildCommand
+    writeFileSync(path.resolve('package.json'), JSON.stringify(projectPackageJson, null, 2))
+
+    // Add build scripts to project
+    const workspacePackageJson = loadJson(path.resolve("packages", packageName,'package.json'))
+    const packageCommand = "npm publish --access public"
+
+    workspacePackageJson.scripts["package:publish"] = packageCommand
+
+    writeFileSync(path.resolve("packages", packageName,'package.json'), JSON.stringify(workspacePackageJson, null, 2))
+}
+
+/**
  * Will install dependencies to package if not previously installed.
  */
 const installDependencies = async (packageName: string) => {
@@ -52,7 +71,7 @@ const installDependencies = async (packageName: string) => {
     // Install dependencies if not previously installed.
     if (!workspacePackageJson.dependencies) { workspacePackageJson.dependencies = {} }
     if (Object.keys(workspacePackageJson.dependencies).length === 0) {
-        console.log("Installing ethers and typescript in packages/" + packageName)
+        console.log(chalk.magenta("Installing ethers and typescript in packages/" + packageName))
         const an = execSync("npm i ethers typescript -w packages/" + packageName, {encoding: "utf-8"})
         console.log(an)
     }
