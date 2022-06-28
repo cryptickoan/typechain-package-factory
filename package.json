@@ -9,7 +9,7 @@
   "author": "@cryptickoan",
   "license": "ISC",
   "bin": {
-    "tc-package": "./src/lib/index.js"
+    "tcp": "./src/lib/index.js"
   },
   "dependencies": {
     "chalk": "^4.1.2",
