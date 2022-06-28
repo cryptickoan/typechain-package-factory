@@ -1,14 +1,25 @@
 import chalk from "chalk"
 import { execSync } from "child_process"
-import { Command } from "./extract"
+import { createDirectory } from "../utils"
+import { Command } from "./types"
 
-const generateTypechainContracts = (pair: string[]) => {
+/**
+ * Generate typechain contracts from the given source and save to the given output path.
+ * @param pair - Array. [sourcePath, outputPath]
+ */
+export const generateTypechainContracts = async (pair: string[]) => {
+    createDirectory(pair[0], pair[1])
+    
     // 1. Call typechain to generate typed contracts
     const output = execSync('npx typechain --target ethers-v5 --out-dir ' +  pair[1] + " " + pair[0],{ encoding: 'utf-8' })
-    console.log(chalk.green(output.slice(0, output.indexOf('!')) + " for pair " + pair))
+    console.log(chalk.green("\r" + output.slice(0, output.indexOf('!'))))
 }
 
-const generateTypechain = (argv: any) => {
+/**
+ * Generate typechain contracts from the given sources and save to their respective output paths. 
+ * @param argv - Array. [sourcePath, outputPath][]
+ */
+export const generateTypechain = (argv: any) => {
     // Get all pairs
     const givenArguments = argv['pairs']
     
@@ -32,7 +43,7 @@ const generateTypechainCheck = (argv: any) => {
 
 export const generateTypechainCommand: Command = {
     name: "generate-typechain",
-    description: "Generate typechain for the given contract and save output to the fiven path",
+    description: "Generate typechain for the given contract and save output to the given path",
     options: {
         pairs: {
               "alias": "-p",
