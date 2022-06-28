@@ -7,7 +7,7 @@ import chalk from "chalk";
  * This function will extract all abis from the given artifact directory into their own files.
  * @param commands - List of commandline commands and options, from yargs.
  */
-export const extractAbis = (commands: any) => {
+export const extractAbis = async (commands: any) => {
     // 1. Get argument from command line.
     const filter = commands['filter']
     const directory = commands['source']

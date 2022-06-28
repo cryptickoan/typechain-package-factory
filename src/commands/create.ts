@@ -11,22 +11,22 @@ import path from "path"
 /**
  * Create and modularize typechain contracts. 
  */
-const create = (argv: any) => {
+const create = async (argv: any) => {
     const packageName = argv['package']
     const packagePath = path.resolve('packages', packageName)
     argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
 
     console.log(chalk.yellow('1. Creating NPM workspace for package.'))
-    createNpmWorkspace(packagePath)
+    await createNpmWorkspace(packagePath)
 
     console.log(chalk.yellow('\n2. Extracting abis from artifacts.'))
-    extractAbis(argv)
+    await extractAbis(argv)
 
     console.log(chalk.yellow('\n3. Generating typechained contracts.'))
-    generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')])
+    await generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')])
 
     console.log(chalk.yellow('\n4. Configuring typescript and installing dependencies.'))
-    setupConfig(packageName)
+    await setupConfig(packageName)
 
     console.log(chalk.yellow("\n5. Building package"))
     execSync('npm run build:' + packageName)
@@ -36,7 +36,7 @@ const create = (argv: any) => {
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 }
 
-const createCheck = () => {
+const createCheck = (argv: any) => {
     // @ts-ignore
     if (argv['filter'] && argv['filter'].length === 0) {
         throw new Error(chalk.red("Filter is empty, please provide at least one filter or remove -f/--filter from your options when running the command"))

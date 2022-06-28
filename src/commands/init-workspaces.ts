@@ -6,7 +6,7 @@ import { Command } from "./types";
  * Initiates an npm workspaces.
  * @param workspace - Name of the workspace.
  */
-export const createNpmWorkspace = (workspace: string) => {
+export const createNpmWorkspace = async (workspace: string) => {
     const output = childProcess.execSync('npm init -w ' + workspace + " -y", { encoding: 'utf-8' })
     console.log(chalk.green("\r" + output.slice(0, output.indexOf(":"))))
 }

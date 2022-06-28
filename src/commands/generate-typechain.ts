@@ -7,7 +7,7 @@ import { Command } from "./types"
  * Generate typechain contracts from the given source and save to the given output path.
  * @param pair - Array. [sourcePath, outputPath]
  */
-export const generateTypechainContracts = (pair: string[]) => {
+export const generateTypechainContracts = async (pair: string[]) => {
     createDirectory(pair[0], pair[1])
     
     // 1. Call typechain to generate typed contracts
