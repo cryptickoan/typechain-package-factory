@@ -1,14 +1,17 @@
 import { generateTypechainContracts } from "./generate-typechain"
-import { extractAbis } from "./extract"
 import { createNpmWorkspace } from "./init-workspaces"
+import { extractAbis } from "./extract"
 import { setupConfig } from "../utils"
 import { execSync } from "child_process"
+import { Command } from "./types"
 import { rmSync } from "fs"
 import chalk from "chalk"
 import path from "path"
-import { Command } from "./types"
  
-const tcPackage = (argv: any) => {
+/**
+ * Create and modularize typechain contracts. 
+ */
+const create = (argv: any) => {
     const packageName = argv['package']
     const packagePath = path.resolve('packages', packageName)
     argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
@@ -33,7 +36,7 @@ const tcPackage = (argv: any) => {
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 }
 
-const tcPackageCheck = () => {
+const createCheck = () => {
     // @ts-ignore
     if (argv['filter'] && argv['filter'].length === 0) {
         throw new Error(chalk.red("Filter is empty, please provide at least one filter or remove -f/--filter from your options when running the command"))
@@ -42,9 +45,9 @@ const tcPackageCheck = () => {
     return true
 }
 
-export const tcPackageCommand: Command = {
-    "name": "typechain-package",
-    "description": "Package typechain contracts",
+export const createCommand: Command = {
+    "name": "create",
+    "description": "Create a package for your contracts.",
     "options": {
         package: {
             "alias": "p",
@@ -66,6 +69,6 @@ export const tcPackageCommand: Command = {
             "type": "array"
         }
     },
-    function: async function (argv: any) { tcPackage(argv) },
-    check: tcPackageCheck
+    function: async function (argv: any) { create(argv) },
+    check: createCheck
 }
