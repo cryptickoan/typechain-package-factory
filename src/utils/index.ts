@@ -39,9 +39,13 @@ export function saveJson(filename: string, data: any, sort?: boolean): any {
     atomicWrite(filename, JSON.stringify(data, null, 2) + "\n");
 }
 
-export const createDirectory = (packageName: string, directoryName: string) => {
-    if (!fs.existsSync(path.resolve('packages', packageName, directoryName))){
-        fs.mkdirSync(path.resolve('packages', packageName, directoryName))
+export const createDirectory = (directoryName: string, packageName: string) => {
+    try {
+        if (!fs.existsSync(directoryName)){
+            fs.mkdirSync(path.resolve('packages', directoryName))
+        }
+    } catch(e) {
+        throw chalk.red("Couldn not create directory under the given package: " + packageName + "\n\nThis usually happens when the package does not exist. Make sure this path exists: \n" +  directoryName + "\n")
     }
 }
 
