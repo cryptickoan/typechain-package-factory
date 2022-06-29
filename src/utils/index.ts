@@ -36,7 +36,7 @@ export function atomicWrite(targetPath: string, value: string | Uint8Array): voi
 }
 
 export function saveJson(filename: string, data: any, sort?: boolean): any {
-    atomicWrite(filename, JSON.stringify(data) + "\n");
+    atomicWrite(filename, JSON.stringify(data, null, 2) + "\n");
 }
 
 export const createDirectory = (packageName: string, directoryName: string) => {

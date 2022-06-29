@@ -16,7 +16,7 @@ export const extractAbis = async (commands: any) => {
     // 2. From the given directory, extract all forge generated artifacts.
     const filesInDirectory = extractArtifactsInDirectory(directory, filter)
 
-    // 3. From the forge generated artifacts, extract all json files.
+    // 3. From the forge generated artifacts, extract all json file paths.
     const artifactPaths = getArtifactPaths(directory, filesInDirectory)
 
     // 4. Extract abi from the json objects and then save it inside the given output directory path.
