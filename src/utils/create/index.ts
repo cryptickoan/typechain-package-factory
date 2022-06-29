@@ -6,8 +6,8 @@ import { createDirectory } from ".."
  * Generate typechain contracts from the given source and save to the given output path.
  * @param pair - Array. [sourcePath, outputPath]
  */
- export const generateTypechainContracts = async (pair: string[]) => {
-    createDirectory(pair[0], pair[1])
+ export const generateTypechainContracts = async (pair: string[], packageName: string) => {
+    createDirectory(pair[1], packageName)
     
     // 1. Call typechain to generate typed contracts
     const output = execSync('npx typechain --target ethers-v5 --out-dir ' +  pair[1] + " " + pair[0],{ encoding: 'utf-8' })
