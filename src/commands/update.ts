@@ -9,8 +9,10 @@ import { extractAbis } from "./extract";
 import { Command } from "./types";
 
 export const update = async (argv: any) => {
-    const packageName = argv['package']
+    const packageName = argv['name']
     argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
+    const publish = argv['publish']
+    console.log({publish})
 
     console.log(chalk.yellow('\nExtracting abis from artifacts.'))
     await extractAbis(argv)
@@ -28,11 +30,20 @@ export const update = async (argv: any) => {
     rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
-    if(askUser('Do you want to publish this pacakge? (yes) ', false)) {
+    if (publish === false) return 
+
+    if(publish === true) {
         const packageJson = loadJson(path.resolve("packages", packageName,'package.json')) 
-        if(!getUserApproval(packageJson)) return
         publishPackage(packageName, packageJson)
-    }  
+    }
+
+    if (typeof publish === "undefined") {
+        if (askUser('Do you want to publish this pacakge? (yes) ', false)) {
+            const packageJson = loadJson(path.resolve("packages", packageName,'package.json')) 
+            if(!getUserApproval(packageJson)) return
+            publishPackage(packageName, packageJson)
+        }
+    }
 }
 
 export const updateCommand: Command = {
@@ -57,6 +68,11 @@ export const updateCommand: Command = {
             "alias": "f",
             "describe": "Files contianing this string will be ignored.",
             "type": "array"
+        },
+        publish: {
+            "alias": "p",
+            "describe": "If true package will be published, if false package will not be published",
+            "type": "boolean"
         }
     },
     function: update,

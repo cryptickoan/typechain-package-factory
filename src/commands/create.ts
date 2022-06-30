@@ -7,7 +7,7 @@ import { createNpmWorkspace } from "../utils/create"
  * Create and modularize typechain contracts. 
  */
 export const create = async (argv: any) => {
-    const packageName = argv['package']
+    const packageName = argv['name']
     console.log(chalk.yellow('1. Creating NPM workspace for package.'))
     await createNpmWorkspace(packageName)
 
@@ -27,8 +27,8 @@ export const createCommand: Command = {
     "name": "create",
     "description": "Create a package for your contracts.",
     "options": {
-        package: {
-            "alias": "p",
+        name: {
+            "alias": "n",
             "describe": "Name for the package.",
             "nargs": 1,
             "type": "string",
@@ -45,6 +45,11 @@ export const createCommand: Command = {
             "alias": "f",
             "describe": "Files contianing this string will be ignored.",
             "type": "array"
+        },
+        publish: {
+            "alias": "p",
+            "describe": "If true package will be published, if false package will not be published",
+            "type": "boolean"
         }
     },
     function: async function (argv: any) { create(argv) },
