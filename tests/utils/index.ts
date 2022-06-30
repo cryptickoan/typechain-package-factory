@@ -1,5 +1,5 @@
 export const executionArguments = {
-    "package": "test",
+    "name": "test",
     "source": "./tests/utils/artifacts",
     "filter": ["Contract"],
     "publish": false

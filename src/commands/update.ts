@@ -12,7 +12,6 @@ export const update = async (argv: any) => {
     const packageName = argv['name']
     argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
     const publish = argv['publish']
-    console.log({publish})
 
     console.log(chalk.yellow('\nExtracting abis from artifacts.'))
     await extractAbis(argv)
