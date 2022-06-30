@@ -63,7 +63,7 @@ export const extractAndSave = (
  * @param directory - Path to look for
  * @param filter - Array. All files containing this word will be ignored.
  */
-export const extractArtifactsInDirectory = (directory: string, filter: string[]) => {
+export const extractArtifactsInDirectory = async (directory: string, filter: string[]) => {
     let filesInDirectory
     try {
         // 1. Get all files in directory
@@ -77,11 +77,11 @@ export const extractArtifactsInDirectory = (directory: string, filter: string[])
 
         // // 3. If there are no artifacts throw an error.
         if (abis.length === 0) {
-            throw new Error('hey')
+            throw new Error('No artifacts found!')
         }
+        
+        return filesInDirectory
      } catch (e) {
         throw new Error(chalk.red("No artifacts found in " + directory + " Maybe you didn't build the contracts yet?"))
     }
-
-    return filesInDirectory
 }
