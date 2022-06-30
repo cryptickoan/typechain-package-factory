@@ -12,30 +12,26 @@ export const update = async (argv: any) => {
     const packageName = argv['package']
     argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
 
-    try {
-        console.log(chalk.yellow('\nExtracting abis from artifacts.'))
-        await extractAbis(argv)
+    console.log(chalk.yellow('\nExtracting abis from artifacts.'))
+    await extractAbis(argv)
 
-        console.log(chalk.yellow('\nGenerating typechained contracts.'))
-        await generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')], packageName)
+    console.log(chalk.yellow('\nGenerating typechained contracts.'))
+    await generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')], packageName)
 
-        console.log(chalk.yellow('\nConfiguring typescript and installing dependencies.'))
-        await setupConfig(packageName)
+    console.log(chalk.yellow('\nConfiguring typescript and installing dependencies.'))
+    await setupConfig(packageName)
 
-        console.log(chalk.yellow("\nBuilding package"))
-        execSync('npm run build:' + packageName, {encoding: 'utf-8'})
+    console.log(chalk.yellow("\nBuilding package"))
+    execSync('npm run build:' + packageName, {encoding: 'utf-8'})
 
-        
-        rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
-        console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
+    
+    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
+    console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
-        if(askUser('Do you want to publish this pacakge? (yes) ', false)) {
-            const packageJson = loadJson(path.resolve("packages", packageName,'package.json')) 
-            if(!getUserApproval(packageJson)) return
-            publishPackage(packageName, packageJson) 
-        }  
-    } catch (e) {
-        throw Error(e)
+    if(askUser('Do you want to publish this pacakge? (yes) ', false)) {
+        const packageJson = loadJson(path.resolve("packages", packageName,'package.json')) 
+        if(!getUserApproval(packageJson)) return
+        publishPackage(packageName, packageJson)
     }  
 }
 
