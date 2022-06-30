@@ -30,17 +30,17 @@ describe('The create command', () => {
     })
 
     it("Should create the workspace directory, and this directory should have the expected structure", () => {
-        const folder = readAndFilterDirectory(path.resolve('packages', executionArguments['package']))
+        const folder = readAndFilterDirectory(path.resolve('packages', executionArguments['name']))
         expect(folder).toEqual(folderStructure)
     })
 
     it("Should generate all the expected typechain files", () => {
-        const typechainContracts = readAndFilterDirectory(path.resolve('packages', executionArguments['package'], 'src'))
+        const typechainContracts = readAndFilterDirectory(path.resolve('packages', executionArguments['name'], 'src'))
         expect(typechainContracts).toEqual(expectedTypechainOutput)
     })
 
     it("Typescript build files should have expected structure", () => {
-        const buildFiles = readAndFilterDirectory(path.resolve('packages', executionArguments['package'], 'dist'))
+        const buildFiles = readAndFilterDirectory(path.resolve('packages', executionArguments['name'], 'dist'))
         expect(buildFiles).toEqual(expectTypescriptOutput)
     })
 
