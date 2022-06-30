@@ -1,0 +1,537 @@
+{
+  "abi": [
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ],
+      "name": "ApprovalForAll",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "ids",
+          "type": "uint256[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "TransferBatch",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "TransferSingle",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "value",
+          "type": "string"
+        },
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "URI",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "balanceOf",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address[]",
+          "name": "owners",
+          "type": "address[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "ids",
+          "type": "uint256[]"
+        }
+      ],
+      "name": "balanceOfBatch",
+      "outputs": [
+        {
+          "internalType": "uint256[]",
+          "name": "balances",
+          "type": "uint256[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "isApprovedForAll",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "ids",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "uint256[]",
+          "name": "amounts",
+          "type": "uint256[]"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "safeBatchTransferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "from",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "safeTransferFrom",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "operator",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "approved",
+          "type": "bool"
+        }
+      ],
+      "name": "setApprovalForAll",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "id",
+          "type": "uint256"
+        }
+      ],
+      "name": "uri",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "deployedBytecode": {
+    "object": "0x",
+    "sourceMap": "",
+    "linkReferences": {}
+  },
+  "ast": {
+    "absolutePath": "/Users/cryptickoan/Documents/Work/Convex/ethereum-standards/token-standards/src/Contract.sol",
+    "id": 1648,
+    "exportedSymbols": {
+      "Contract": [
+        1644
+      ],
+      "Contract12": [
+        1641
+      ],
+      "Contract2": [
+        1647
+      ],
+      "ERC1155": [
+        634
+      ],
+      "ERC20": [
+        1066
+      ],
+      "ERC721": [
+        1610
+      ]
+    },
+    "nodeType": "SourceUnit",
+    "src": "39:302:3",
+    "nodes": [
+      {
+        "id": 1632,
+        "nodeType": "PragmaDirective",
+        "src": "39:24:3",
+        "literals": [
+          "solidity",
+          "^",
+          "0.8",
+          ".13"
+        ]
+      },
+      {
+        "id": 1634,
+        "nodeType": "ImportDirective",
+        "src": "65:47:3",
+        "absolutePath": "/Users/cryptickoan/Documents/Work/Convex/ethereum-standards/token-standards/lib/solmate/src/tokens/ERC20.sol",
+        "file": "solmate/tokens/ERC20.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 1648,
+        "sourceUnit": 1067,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 1633,
+              "name": "ERC20",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 1066,
+              "src": "73:5:3",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 1636,
+        "nodeType": "ImportDirective",
+        "src": "113:51:3",
+        "absolutePath": "/Users/cryptickoan/Documents/Work/Convex/ethereum-standards/token-standards/lib/solmate/src/tokens/ERC1155.sol",
+        "file": "solmate/tokens/ERC1155.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 1648,
+        "sourceUnit": 679,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 1635,
+              "name": "ERC1155",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 634,
+              "src": "121:7:3",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 1638,
+        "nodeType": "ImportDirective",
+        "src": "165:49:3",
+        "absolutePath": "/Users/cryptickoan/Documents/Work/Convex/ethereum-standards/token-standards/lib/solmate/src/tokens/ERC721.sol",
+        "file": "solmate/tokens/ERC721.sol",
+        "nameLocation": "-1:-1:-1",
+        "scope": 1648,
+        "sourceUnit": 1631,
+        "symbolAliases": [
+          {
+            "foreign": {
+              "id": 1637,
+              "name": "ERC721",
+              "nodeType": "Identifier",
+              "overloadedDeclarations": [],
+              "referencedDeclaration": 1610,
+              "src": "173:6:3",
+              "typeDescriptions": {}
+            },
+            "nameLocation": "-1:-1:-1"
+          }
+        ],
+        "unitAlias": ""
+      },
+      {
+        "id": 1641,
+        "nodeType": "ContractDefinition",
+        "src": "216:40:3",
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 1639,
+              "name": "ERC20",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 1066,
+              "src": "248:5:3"
+            },
+            "id": 1640,
+            "nodeType": "InheritanceSpecifier",
+            "src": "248:5:3"
+          }
+        ],
+        "canonicalName": "Contract12",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          1641,
+          1066
+        ],
+        "name": "Contract12",
+        "nameLocation": "234:10:3",
+        "scope": 1648,
+        "usedErrors": []
+      },
+      {
+        "id": 1644,
+        "nodeType": "ContractDefinition",
+        "src": "258:40:3",
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 1642,
+              "name": "ERC1155",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 634,
+              "src": "288:7:3"
+            },
+            "id": 1643,
+            "nodeType": "InheritanceSpecifier",
+            "src": "288:7:3"
+          }
+        ],
+        "canonicalName": "Contract",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          1644,
+          634
+        ],
+        "name": "Contract",
+        "nameLocation": "276:8:3",
+        "scope": 1648,
+        "usedErrors": []
+      },
+      {
+        "id": 1647,
+        "nodeType": "ContractDefinition",
+        "src": "300:40:3",
+        "abstract": true,
+        "baseContracts": [
+          {
+            "baseName": {
+              "id": 1645,
+              "name": "ERC721",
+              "nodeType": "IdentifierPath",
+              "referencedDeclaration": 1610,
+              "src": "331:6:3"
+            },
+            "id": 1646,
+            "nodeType": "InheritanceSpecifier",
+            "src": "331:6:3"
+          }
+        ],
+        "canonicalName": "Contract2",
+        "contractDependencies": [],
+        "contractKind": "contract",
+        "fullyImplemented": false,
+        "linearizedBaseContracts": [
+          1647,
+          1610
+        ],
+        "name": "Contract2",
+        "nameLocation": "318:9:3",
+        "scope": 1648,
+        "usedErrors": []
+      }
+    ],
+    "license": "UNLICENSED"
+  }
+}

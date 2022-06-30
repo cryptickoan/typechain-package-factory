@@ -6,13 +6,12 @@ import { createNpmWorkspace } from "../utils/create"
 /**
  * Create and modularize typechain contracts. 
  */
-const create = async (argv: any) => {
+export const create = async (argv: any) => {
     const packageName = argv['package']
-
     console.log(chalk.yellow('1. Creating NPM workspace for package.'))
     await createNpmWorkspace(packageName)
 
-   update(argv)
+    await update(argv)
 }
 
 const createCheck = (argv: any) => {
