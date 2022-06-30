@@ -24,43 +24,40 @@ describe('The create command', () => {
         rmSync(path.resolve('packages'),{force: true, recursive: true}) // Remove the workspace directory
     })
 
-    describe('hrllo', () => {
+    it("Project's package.json should contain workspaces key", () => {
+        const packageJson = loadJson(path.resolve('package.json'))
+        expect(Object.keys(packageJson)).toContain('workspaces')
+    })
 
-        it("Project's package.json should contain workspaces key", () => {
-            const packageJson = loadJson(path.resolve('package.json'))
-            expect(Object.keys(packageJson)).toContain('workspaces')
-        })
+    it("Should create the workspace directory, and this directory should have the expected structure", () => {
+        const folder = readAndFilterDirectory(path.resolve('packages', executionArguments['name']))
+        expect(folder).toEqual(folderStructure)
+    })
 
-        it("Should create the workspace directory, and this directory should have the expected structure", () => {
-            const folder = readAndFilterDirectory(path.resolve('packages', executionArguments['package']))
-            expect(folder).toEqual(folderStructure)
-        })
+    it("Should generate all the expected typechain files", () => {
+        const typechainContracts = readAndFilterDirectory(path.resolve('packages', executionArguments['name'], 'src'))
+        expect(typechainContracts).toEqual(expectedTypechainOutput)
+    })
 
-        it("Should generate all the expected typechain files", () => {
-            const typechainContracts = readAndFilterDirectory(path.resolve('packages', executionArguments['package'], 'src'))
-            expect(typechainContracts).toEqual(expectedTypechainOutput)
-        })
+    it("Typescript build files should have expected structure", () => {
+        const buildFiles = readAndFilterDirectory(path.resolve('packages', executionArguments['name'], 'dist'))
+        expect(buildFiles).toEqual(expectTypescriptOutput)
+    })
 
-        it("Typescript build files should have expected structure", () => {
-            const buildFiles = readAndFilterDirectory(path.resolve('packages', executionArguments['package'], 'dist'))
-            expect(buildFiles).toEqual(expectTypescriptOutput)
-        })
+    it("User should be able to require the module and call the contract", async () => {
+        const typechainedContractsCJS = require('test')
+        const daiContract = typechainedContractsCJS.ERC20__factory.connect(DAI_ADDRESS, new JsonRpcProvider(process.env.RPC_URL))
+        const decimals = await daiContract.decimals()
+        expect(decimals).toBe(18)
 
-        it("User should be able to require the module and call the contract", async () => {
-            const typechainedContractsCJS = require('test')
-            const daiContract = typechainedContractsCJS.ERC20__factory.connect(DAI_ADDRESS, new JsonRpcProvider(process.env.RPC_URL))
-            const decimals = await daiContract.decimals()
-            expect(decimals).toBe(18)
+    })
 
-        })
-
-        it('User should be able to import the module and call the contract', async () => {
-            // Ignoring imports because the module is created and available only at test runtime.
-            // @ts-ignore
-            const typechainedContractsESM = await import('test')
-            const daiContract = typechainedContractsESM.ERC20__factory.connect(DAI_ADDRESS, new JsonRpcProvider(process.env.RPC_URL))
-            const name = await daiContract .name()
-            expect(name).toBe('Dai Stablecoin')
-        })
+    it('User should be able to import the module and call the contract', async () => {
+        // Ignoring imports because the module is created and available only at test runtime.
+        // @ts-ignore
+        const typechainedContractsESM = await import('test')
+        const daiContract = typechainedContractsESM.ERC20__factory.connect(DAI_ADDRESS, new JsonRpcProvider(process.env.RPC_URL))
+        const name = await daiContract .name()
+        expect(name).toBe('Dai Stablecoin')
     })
 })

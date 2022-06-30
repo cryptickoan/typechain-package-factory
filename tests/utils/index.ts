@@ -1,7 +1,8 @@
 export const executionArguments = {
-    "package": "test",
+    "name": "test",
     "source": "./tests/utils/artifacts",
-    "filter": ["Contract"]
+    "filter": ["Contract"],
+    "publish": false
 }
 export const folderStructure = [
     '.npmignore',
