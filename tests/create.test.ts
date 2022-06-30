@@ -6,6 +6,8 @@ import { readFileSync, rmSync } from "fs"
 import path from "path"
 import 'dotenv/config'
 
+// We only test the create command because its literally the command using all functions in this project. 
+// All other commands use a subset of them.
 describe('The create command', () => {
     jest.setTimeout(50000)
     const originalPackageJson = loadJson(path.resolve('package.json'))
