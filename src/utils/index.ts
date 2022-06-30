@@ -61,3 +61,11 @@ export const askUser = (text: string, shouldAbort: boolean) => {
     }
     return true
 }
+
+
+export const checkNodeJsVersion = async () => {
+    if (parseInt(process.version.slice(1,3)) < 16) {
+        throw Error("You're currently using node version: " + process.version + ". Please use 16 or later." )
+    }
+
+}
