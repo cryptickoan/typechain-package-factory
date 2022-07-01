@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { writeFileSync } from "fs";
 import path from "path";
+import { checkNodeJsVersion, verifyPackageExists } from "../utils";
 import { getPackageInfo, getUserApproval, publishPackage } from "../utils/publish";
 import { Command } from "./types";
 
@@ -9,6 +10,9 @@ import { Command } from "./types";
  */
 const publish = async (argv: any) => {
     const packageName = argv['package']
+    
+    checkNodeJsVersion()
+    verifyPackageExists(packageName)
     const workspacePackageJson = getPackageInfo(packageName)
 
     if(!getUserApproval(workspacePackageJson)) return
@@ -23,14 +27,14 @@ export const publishCommand: Command = {
     name: "publish",
     description: "Publish package and handle metadata edition",
     options: {
-        package: {
-            alias: "p",
+        name: {
+            alias: "n",
             describe: "Name of the workspace containing package.",
             demandOption: true,
             type: "string",
             nargs: 1
         }
     },
-    function: async (argv: any) => publish(argv),
+    function: publish,
     check: () => {return true}
 }

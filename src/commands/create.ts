@@ -2,11 +2,14 @@ import { Command } from "./types"
 import chalk from "chalk"
 import { update } from "./update"
 import { createNpmWorkspace } from "../utils/create"
+import { checkNodeJsVersion } from "../utils"
  
 /**
  * Create and modularize typechain contracts. 
  */
 export const create = async (argv: any) => {
+    checkNodeJsVersion()
+
     const packageName = argv['name']
     console.log(chalk.yellow('1. Creating NPM workspace for package.'))
     await createNpmWorkspace(packageName)
@@ -52,6 +55,6 @@ export const createCommand: Command = {
             "type": "boolean"
         }
     },
-    function: async function (argv: any) { create(argv) },
+    function: create,
     check: createCheck
 }
