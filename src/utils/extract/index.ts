@@ -42,7 +42,11 @@ export const extractAndSave = (
 
     // If output directory does not exist, create it.
     if (!existsSync(outputPath)){
-        mkdirSync(outputPath)
+        try {
+            mkdirSync(outputPath)
+        } catch (e) {
+            throw Error(chalk.red("Error creating directory, plase make sure this path exists: ", outputPath))
+        }
     }
 
     // Extract all abis
