@@ -13,7 +13,7 @@ describe('The create command', () => {
     const originalGitIgnore = readFileSync(path.resolve('.gitignore'), {encoding: 'utf-8'})
 
     beforeAll(async () => {
-        await checkNodeJsVersion()
+        checkNodeJsVersion()
         await create(executionArguments)
     })
 

@@ -1,34 +1,35 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import { rmSync } from "fs";
 import path from "path";
-import { askUser, loadJson, setupConfig } from "../utils";
-import { generateTypechainContracts } from "../utils/create";
+import { askUser, checkNodeJsVersion, loadJson, setupConfig, verifyPackageExists } from "../utils";
+import { buildPackage, generateTypechainContracts } from "../utils/create";
 import { getUserApproval, publishPackage } from "../utils/publish";
 import { extractAbis } from "./extract";
 import { Command } from "./types";
 
 export const update = async (argv: any) => {
     const packageName = argv['name']
-    argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
+    argv['out'] = path.resolve('packages', packageName, 'extracted-abis-temp') // Direcory to temporarily save extracted ABIs.
     const publish = argv['publish']
+
+    checkNodeJsVersion()
+    verifyPackageExists(packageName)
 
     console.log(chalk.yellow('\nExtracting abis from artifacts.'))
     await extractAbis(argv)
 
     console.log(chalk.yellow('\nGenerating typechained contracts.'))
     await generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')], packageName)
+    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
 
     console.log(chalk.yellow('\nConfiguring typescript and installing dependencies.'))
     await setupConfig(packageName)
 
     console.log(chalk.yellow("\nBuilding package"))
-    execSync('npm run build:' + packageName, {encoding: 'utf-8'})
-
-    
-    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
+    buildPackage(packageName)
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
+    console.log(chalk.cyan("\nPackage updated successfuly!"))
     if (publish === false) return 
 
     if(publish === true) {
@@ -43,14 +44,16 @@ export const update = async (argv: any) => {
             publishPackage(packageName, packageJson)
         }
     }
+
+    console.log(chalk.cyan("\nRun tcp publish --help for instructions on how to publish your package."))
 }
 
 export const updateCommand: Command = {
     name: "update",
     description: "Update package",
     options: {
-        package: {
-            "alias": "p",
+        name: {
+            "alias": "n",
             "describe": "Name for the package.",
             "nargs": 1,
             "type": "string",

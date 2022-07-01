@@ -1,13 +1,14 @@
 import { extractAndSave, extractArtifactsInDirectory, getArtifactPaths } from "../utils/extract";
 import { Command } from "./types";
-import { Argv } from "yargs";
 import chalk from "chalk";
+import { checkNodeJsVersion } from "../utils";
 
 /**
  * This function will extract all abis from the given artifact directory into their own files.
  * @param commands - List of commandline commands and options, from yargs.
  */
 export const extractAbis = async (commands: any) => {
+    checkNodeJsVersion()
     // 1. Get argument from command line.
     const filter = commands['filter']
     const directory = commands['source']
@@ -67,8 +68,6 @@ export const extractCommand: Command = {
               alias: 'h'
         }
     },
-    function: async function (argv: Argv) {
-        extractAbis(argv)
-    },
+    function: extractAbis,
     check: extractCheck
 }

@@ -9,7 +9,7 @@ import { publishCommand } from './commands/publish';
 import { updateCommand } from './commands/update';
 
 yargonaut.style('green').helpStyle('green').errorsStyle('red')
-const usage =  chalk.green("\nUsage: tc-package <SUBCOMMAND> sentence to be translated");
+const usage =  chalk.green("\nUsage: tc-package <SUBCOMMAND> <OPTIONS>");
 yargs  
       .version(false)
       .usage(usage)

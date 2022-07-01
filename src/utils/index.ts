@@ -30,9 +30,13 @@ export function loadJson(path: string): any {
 }
 
 export function atomicWrite(targetPath: string, value: string | Uint8Array): void {
-    const tmp = path.resolve(".atomic-tmp");
-    fs.writeFileSync(tmp, value);
-    fs.renameSync(tmp, targetPath);
+    try {
+        const tmp = path.resolve(".atomic-tmp");
+        fs.writeFileSync(tmp, value);
+        fs.renameSync(tmp, targetPath);
+    } catch (e) {
+        throw Error(e)
+    }
 }
 
 export function saveJson(filename: string, data: any, sort?: boolean): any {
@@ -55,17 +59,26 @@ export const askUser = (text: string, shouldAbort: boolean) => {
     console.log("\n")
     const h = prompt(chalk.yellow(text))
     
-    if (h.includes('n') || h.includes('N')) {
-        if (shouldAbort) {console.log(chalk.grey("Aborted"))}
+    if (h === null || h.includes('n') || h.includes('N')) {
+        if (shouldAbort) {
+            console.log(chalk.grey("Aborted publishing."))
+            console.log(chalk.cyan("\nRun tcp publish --help for instructions on how to publish your package."))
+        }
         return false
     }
     return true
 }
 
 
-export const checkNodeJsVersion = async () => {
+export const checkNodeJsVersion = () => {
     if (parseInt(process.version.slice(1,3)) < 16) {
-        throw Error("You're currently using node version: " + process.version + ". Please use 16 or later." )
+        throw Error(chalk.red("You're currently using node version: " + process.version + ". Please use 16 or later." ))
     }
 
+}
+
+export const verifyPackageExists = (packageName: string) => {
+    if (!fs.existsSync(path.resolve('packages')) || !readAndFilterDirectory(path.resolve('packages')).includes(packageName)) {
+         throw Error(chalk.red("No package found with the given name (" + packageName + ").") + chalk.cyan(" Try running tcp create --help.")) 
+    }
 }

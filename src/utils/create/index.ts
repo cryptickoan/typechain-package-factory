@@ -23,3 +23,12 @@ export const createNpmWorkspace = async (workspace: string) => {
     const output = execSync('npm init -w ' + 'packages/' + workspace + " -y", { encoding: 'utf-8' })
     console.log(chalk.green("\r" + output.slice(0, output.indexOf(":"))))
 }
+
+export const buildPackage = (packageName: string) => {
+    try {
+        execSync('npm run build:' + packageName, {encoding: 'utf-8'})
+    } catch (e) {
+        console.log(chalk.red("\n Looks like something went wrong :(\n"))
+        throw Error(e.output)
+    }
+}
