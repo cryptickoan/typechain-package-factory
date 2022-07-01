@@ -10,7 +10,7 @@ import { Command } from "./types";
 
 export const update = async (argv: any) => {
     const packageName = argv['name']
-    argv['out'] = path.resolve('temp') // Direcory to temporarily save extracted ABIs.
+    argv['out'] = path.resolve('packages', packageName, 'extracted-abis-temp') // Direcory to temporarily save extracted ABIs.
     const publish = argv['publish']
 
     console.log(chalk.yellow('\nExtracting abis from artifacts.'))
@@ -18,15 +18,13 @@ export const update = async (argv: any) => {
 
     console.log(chalk.yellow('\nGenerating typechained contracts.'))
     await generateTypechainContracts([path.resolve(argv['out'],'*.json'), path.resolve('packages', packageName, 'src')], packageName)
+    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
 
     console.log(chalk.yellow('\nConfiguring typescript and installing dependencies.'))
     await setupConfig(packageName)
 
     console.log(chalk.yellow("\nBuilding package"))
     execSync('npm run build:' + packageName, {encoding: 'utf-8'})
-
-    
-    rmSync(argv['out'],{force: true, recursive: true}) // Remove directory where extracted ABIs were saved.
     console.log(chalk.green("Package built successfully! Module is compatible with esm and cjs.\x07"))
 
     if (publish === false) return 

@@ -55,7 +55,7 @@ export const askUser = (text: string, shouldAbort: boolean) => {
     console.log("\n")
     const h = prompt(chalk.yellow(text))
     
-    if (h.includes('n') || h.includes('N')) {
+    if (h === null || h.includes('n') || h.includes('N')) {
         if (shouldAbort) {console.log(chalk.grey("Aborted"))}
         return false
     }
