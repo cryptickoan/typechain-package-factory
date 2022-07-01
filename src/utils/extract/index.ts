@@ -18,12 +18,17 @@ export const getArtifactPaths = (
     // Artifact names end in .sol and abis in .json.
     for (const i of artifactsToGet) {
         // For evety artifact in the directory, extract the name of the file + delete .sol and make it .json
-        abiFilenames.push(i.slice(0,i.indexOf('.')) + ".json")
+        if (i.includes('sol')) {
+            abiFilenames.push(i.slice(0,i.indexOf('.')) + ".json")
+            // Generate path for the abi file. Should be a json file. 
+            abiPaths.push(path.resolve(artifactDirPath, i, abiFilenames[artifactsToGet.indexOf(i)]))
+        }
 
-        // Generate path for the abi file. Should be a json file. 
-        abiPaths.push(path.resolve(artifactDirPath, i, abiFilenames[artifactsToGet.indexOf(i)]))
+        if (i.includes('json')) {
+            abiFilenames.push(i)
+            abiPaths.push(path.resolve(artifactDirPath,i))
+        }
     }
-
     // Return the abi paths, and the abi filenames
     return { abiPaths, abiFilenames }
 }
@@ -76,7 +81,7 @@ export const extractArtifactsInDirectory = async (directory: string, filter: str
         // 2. Check for all forge generated artifacts 
         let abis: string[] = []
         for (const file of filesInDirectory) {
-            if (file.includes('sol')) {abis.push(file)}
+            if (file.includes('sol') || file.includes('json')) {abis.push(file)}
         }
 
         // // 3. If there are no artifacts throw an error.

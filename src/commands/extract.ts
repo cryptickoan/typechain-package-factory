@@ -1,6 +1,5 @@
 import { extractAndSave, extractArtifactsInDirectory, getArtifactPaths } from "../utils/extract";
 import { Command } from "./types";
-import { Argv } from "yargs";
 import chalk from "chalk";
 import { checkNodeJsVersion } from "../utils";
 
